@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 
-const blogPageSchema= new mongoose.Schema({
+const miloBlogSchema = new mongoose.Schema({
     title: String,
     isReadyToPost: Boolean,
     content: {
@@ -10,4 +10,4 @@ const blogPageSchema= new mongoose.Schema({
     }
 }, { timestamps: true})
 
-module.exports = mongoose.model("blogPage", blogPageSchema)
+module.exports = mongoose.model("miloBlog", miloBlogSchema)

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create a New Blog Page</title>
+
+</head>
+
+<body>
+    <h1>Create a New Blog Page</h1>
+    <form action="miloBlog" method="POST">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required />
+
+        <label for="blogInfo">Blog Info:</label>
+        <textarea placeholder="enter Blog info here!" id="blogInfo" name="blogInfo" required>
+        </textarea>
+
+        <label for="isReadyToPost">Ready to Post!</label>
+        <input type="checkbox" id="isReadyToPost" name="isReadyToPost" />
+
+
+        <button type="submit">Add Blog Post!</button>
+    </form>
+
+</body>
+
+</html>
