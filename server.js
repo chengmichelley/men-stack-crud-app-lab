@@ -2,13 +2,15 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const miloBlog = require("./models/miloBlog")
-
 require("./db/connection");
 
-app.use(express.urlencoded({ extended:true}));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+app.set("view engine", "ejs")
 
 app.get("/", (req,res) => {
-    res.render("index.ejs");
+    res.render("index");
 });
 
 // GET /miloblog ALL BLOG PAGES
@@ -16,7 +18,8 @@ app.get("/", (req,res) => {
 app.get("/miloBlogs", async (req, res)=>{
     try {
         const miloBlogs = await miloBlog.find();
-        res.render("miloBlogPages/index.ejs", {miloBlogs});
+        console.log("found from DB:", miloBlogs)
+        res.render("miloBlogPages/index", {miloBlogs});
     } catch (error) {
         res.json({err: error.message})
     }
@@ -25,11 +28,37 @@ app.get("/miloBlogs", async (req, res)=>{
 // GET	/miloblog/new	New	Shows a form to create a new blog page
 
 app.get("/miloBlogs/new", (req,res) => {
-    res.render("miloBlogPages/new.ejs", { message: ""});
+    res.render("miloBlogPages/new", { message: ""});
 });
 
-// POST	/miloBlog	Create	Creates a new plant
+// POST	/miloBlog	Create	Creates a new blog
+
+app.post("/miloBlogs", async (req,res)=> {
+    console.log("Body Check", req.body);
+    try {
+        const {name, content} = req.body || {};
+        if(!name || !name.trim()) {
+            return res.render("miloBlogPages/new", {
+                message: "Name must have a valid field",
+            });
+        }
+        if(!content || !content.trim()) {
+            return res.render("miloBlogPages/new",{
+                message: "Please include content"
+            })
+        }
+        req.body.isReadyToPost = req.body.isReadyToPost === "on";
+
+        await miloBlog.create(req.body);
+        res.redirect("/miloBlogs");
+    } catch (error) {
+        console.log("POST error", error);
+        res.render("error.ejs", {message: error.message});
+    }
+});
 // GET	/miloBlog/:id	Show	Displays a specific blog by its ID
+
+
 // GET	/miloBlog/:id/edit	Edit	Shows a form to edit an existing blog
 // PUT	/miloBlog/:id	Update	Updates a specific blog by its ID
 // DELETE	/miloBlog/:id	Destroy	Deletes a specific blog by its ID

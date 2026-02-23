@@ -6,6 +6,16 @@
     <title>All Blog Pages</title>
 </head>
 <body>
+    <%- include('../partials/navbar.ejs') %>
+
     <h1>All of Milo's Blog Pages</h1>
+    <ul>
+        <% miloBlogs.forEach(miloBlog=> { %>
+            <a href="/miloBlogs/<%= miloBlog._id %>">
+                <li ><%= miloBlog.name %></li>
+            </a>
+            <% }) %>
+    </ul>
+
 </body>
 </html>

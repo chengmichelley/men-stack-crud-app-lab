@@ -1,12 +1,15 @@
 const mongoose = require("mongoose")
 
 const miloBlogSchema = new mongoose.Schema({
-    title: String,
-    isReadyToPost: Boolean,
+    name: String,
+    isReadyToPost: {
+        type: Boolean,
+        default: false,
+    },
     content: {
         type: String,
         required: true,
-        minLength: 10
+        minLength: 1
     }
 }, { timestamps: true})
 
