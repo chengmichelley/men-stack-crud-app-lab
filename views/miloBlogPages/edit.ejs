@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Milo's Blog: <%= miloBlog.name %></title>
+</head>
+<body>
+    <%- include('../partials/navbar.ejs') %>
+    <h1>Edit Milo's Blog: <%= miloBlog.name %></h1>
+    <form action="/miloBlogs/<%= miloBlog._id %>?_method=PUT" method="POST">
+        <label for="name">Title:</label>
+        <input type="text" id="name" name="name" value= "<%= miloBlog.name %>" required />
+    
+        <label for="content">Content:</label>
+        <textarea placeholder="update Blog info here!" id="content" name="content" required><%= miloBlog.content %></textarea>
+    
+        <label for="isReadyToPost">Ready to Post!</label>
+        <input type="checkbox" id="isReadyToPost" name="isReadyToPost" <%= miloBlog.isReadyToPost ? "checked" : "" %> />
+    
+    
+        <button type="submit">Update Blog Post!</button>
+    </form>
+
+</body>
+</html>

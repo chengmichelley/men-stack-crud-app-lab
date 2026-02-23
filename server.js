@@ -13,7 +13,7 @@ app.get("/", (req,res) => {
     res.render("index");
 });
 
-// GET /miloblog ALL BLOG PAGES
+// GET /miloBlog ALL BLOG PAGES
 
 app.get("/miloBlogs", async (req, res)=>{
     try {
@@ -25,7 +25,7 @@ app.get("/miloBlogs", async (req, res)=>{
     }
 });
 
-// GET	/miloblog/new	New	Shows a form to create a new blog page
+// GET	/miloBlog/new	New	Shows a form to create a new blog page
 
 app.get("/miloBlogs/new", (req, res) => {
     res.render("miloBlogPages/new", { message: ""});
@@ -62,9 +62,7 @@ app.get("/miloBlogs/:miloBlogId", async (req, res)=> {
     try {
         const foundBlog = await miloBlog.findById(req.params.miloBlogId);
         if(!foundBlog)
-            throw new Error(
-                "Cannot find that Blog!"
-        );
+            throw new Error("Cannot find that Blog!");
         res.render("miloBlogPages/show", {
             miloBlog: foundBlog,
         })
@@ -72,9 +70,23 @@ app.get("/miloBlogs/:miloBlogId", async (req, res)=> {
         console.log("GET error", error);
         res.status(404).json({err: error.message});
     }
-})
+});
 
 // GET	/miloBlog/:id/edit	Edit	Shows a form to edit an existing blog
+
+app.get("/miloBlogs/:miloBlogId/edit", async (req, res)=> {
+    try {
+        const editBlog = await miloBlog.findById(req.params.miloBlogId);
+        if(!editBlog)
+            throw Error("Cannot find that Blog!");
+        res.render("miloBlogPages/edit", {
+            miloBlog: editBlog,
+        })
+    } catch (error) {
+        console.log("Edit error", error);
+        res.status(404).json({err: error.message});
+    }
+});
 // PUT	/miloBlog/:id	Update	Updates a specific blog by its ID
 // DELETE	/miloBlog/:id	Destroy	Deletes a specific blog by its ID
 
