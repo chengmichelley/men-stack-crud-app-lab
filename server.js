@@ -27,13 +27,13 @@ app.get("/miloBlogs", async (req, res)=>{
 
 // GET	/miloblog/new	New	Shows a form to create a new blog page
 
-app.get("/miloBlogs/new", (req,res) => {
+app.get("/miloBlogs/new", (req, res) => {
     res.render("miloBlogPages/new", { message: ""});
 });
 
 // POST	/miloBlog	Create	Creates a new blog
 
-app.post("/miloBlogs", async (req,res)=> {
+app.post("/miloBlogs", async (req, res)=> {
     console.log("Body Check", req.body);
     try {
         const {name, content} = req.body || {};
@@ -58,6 +58,21 @@ app.post("/miloBlogs", async (req,res)=> {
 });
 // GET	/miloBlog/:id	Show	Displays a specific blog by its ID
 
+app.get("/miloBlogs/:miloBlogId", async (req, res)=> {
+    try {
+        const foundBlog = await miloBlog.findById(req.params.miloBlogId);
+        if(!foundBlog)
+            throw new Error(
+                "Cannot find that Blog!"
+        );
+        res.render("miloBlogPages/show", {
+            miloBlog: foundBlog,
+        })
+    } catch (error) {
+        console.log("GET error", error);
+        res.status(404).json({err: error.message});
+    }
+})
 
 // GET	/miloBlog/:id/edit	Edit	Shows a form to edit an existing blog
 // PUT	/miloBlog/:id	Update	Updates a specific blog by its ID
