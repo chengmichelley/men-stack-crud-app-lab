@@ -2,9 +2,11 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const miloBlog = require("./models/miloBlog")
+const methodOverride = require("method-override")
 require("./db/connection");
 
 app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride("_method"))
 app.use(express.json());
 
 app.set("view engine", "ejs")
@@ -87,7 +89,31 @@ app.get("/miloBlogs/:miloBlogId/edit", async (req, res)=> {
         res.status(404).json({err: error.message});
     }
 });
+
 // PUT	/miloBlog/:id	Update	Updates a specific blog by its ID
+
+app.put("/miloBlogs/:miloBlogId", async (req, res)=> {
+    try {
+        req.body.isReadyToPost = req.body.isReadyToPost === "on" ? true : false;
+        const updateBlog = await miloBlog.findByIdAndUpdate(req.params.miloBlogId, req.body, { returnDocument: "after" });
+        if(!updateBlog)
+            throw Error("Cannot find that Blog!");
+        res.redirect(`/miloBlogs/${updateBlog._id}`)
+    } catch (error) {
+        res.render("error.ejs", { message: error.message });
+    }
+})
+
 // DELETE	/miloBlog/:id	Destroy	Deletes a specific blog by its ID
+
+app.delete("/miloBlogs/:miloBlogId", async (req, res)=> {
+    try {
+        const deleteBlog = await miloBlog.findByIdAndDelete(req.params.miloBlogId);
+        if(!deleteBlog) throw new Error("Cannot find that blog to delete!");
+        res.redirect("/miloBlogs")
+    } catch (error) {
+        res.render("error.ejs", { message: error.message });
+    }
+})
 
 app.listen(3000, ()=> console.log("Milo's blog is live!"))
